@@ -59,6 +59,10 @@ func (c *Client) Save() (string, error) {
 
 		tweets = append(tweets, ts...)
 		maxID = tweets[len(tweets)-1].ID
+
+		if len(ts) <= 10 {
+			break
+		}
 	}
 
 	data := make(plotter.XYZs, len(tweets))
@@ -69,12 +73,12 @@ func (c *Client) Save() (string, error) {
 			return "", err
 		}
 
-		l, err := time.LoadLocation("America/Los_Angeles")
+		loc, err := time.LoadLocation("America/Los_Angeles")
 		if err != nil {
 			panic(err)
 		}
-		t = t.In(l)
 
+		t = t.In(loc)
 		day := t.Weekday()
 		hour := t.Hour()
 		likes := tweet.FavoriteCount
@@ -85,6 +89,8 @@ func (c *Client) Save() (string, error) {
 			Z: float64(likes),
 		})
 	}
+
+	fmt.Println("plotting...")
 
 	minZ, maxZ := math.Inf(1), math.Inf(-1)
 	for _, xyz := range data {
@@ -153,6 +159,8 @@ func (c *Client) fetchTweets(maxID int64) ([]twitter.Tweet, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Printf("fetched %d tweets\n", len(tweets))
 
 	return tweets, nil
 }

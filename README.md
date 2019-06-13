@@ -2,10 +2,19 @@
 
 > Visualize tweet patterns
 
-## install
+## Install
 
 ```bash
 go get -u github.com/miguelmota/tweet-patterns/cmd/tweet_patterns
+```
+
+Required environment variables:
+
+```bash
+export TWITTER_CONSUMER_KEY=sw...Nu
+export TWITTER_CONSUMER_SECRET=9W..mM
+export TWITTER_ACCESS_TOKEN_KEY="30..Ln"
+export TWITTER_ACCESS_TOKEN_SECRET=2s..02
 ```
 
 ## Getting started
