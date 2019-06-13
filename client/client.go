@@ -51,7 +51,8 @@ func NewClient(config *Config) *Client {
 func (c *Client) Save() (string, error) {
 	var tweets []twitter.Tweet
 	var maxID int64
-	for i := 0; i < 10; i++ {
+	var pages = 20
+	for i := 0; i < pages; i++ {
 		ts, err := c.fetchTweets(maxID)
 		if err != nil {
 			return "", err
@@ -60,7 +61,7 @@ func (c *Client) Save() (string, error) {
 		tweets = append(tweets, ts...)
 		maxID = tweets[len(tweets)-1].ID
 
-		if len(ts) <= 10 {
+		if len(ts) <= 5 {
 			break
 		}
 	}
@@ -107,9 +108,9 @@ func (c *Client) Save() (string, error) {
 		return "", err
 	}
 
-	p.Title.Text = fmt.Sprintf("%s latest %d tweet likes", c.username, len(tweets))
-	p.X.Label.Text = "Weekday"
-	p.Y.Label.Text = "Hour"
+	p.Title.Text = fmt.Sprintf("%s latest %d tweets # of 'likes'", c.username, len(tweets))
+	p.X.Label.Text = "weekday"
+	p.Y.Label.Text = "hour"
 	p.X.Tick.Marker = plot.ConstantTicks([]plot.Tick{{0, "Sun"}, {1, "Mon"}, {2, "Tue"}, {3, "Wed"}, {4, "Thu"}, {5, "Fri"}, {6, "Sat"}, {7, "Sun"}})
 
 	yticks := make([]plot.Tick, 24)
